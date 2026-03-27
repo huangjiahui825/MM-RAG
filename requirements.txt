@@ -1,0 +1,4 @@
+llama-index-core
+llama-index-vector-stores-qdrant
+httpx
+Pillow
