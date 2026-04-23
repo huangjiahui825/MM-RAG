@@ -2,10 +2,10 @@ from pathlib import Path
 import json
 from online.multimodal_search import multimodal_search
 from offline.build_multimodal_index import build_multimodal_index
-from generation import extract_filter_criteria, vlm_select_assetids
+from generation import vlm_select_assetids
 from reranker import rerank
+from crypt import encrypt
 import config
-from evaluation.retrieval_metrics import evaluate_retrieval
 import time
 
 
@@ -27,14 +27,20 @@ def run_online():
 
     for i, item in enumerate(query_data):
         
-
+        # 4.23 新增：
         print(f"\n--- 查询 {i+1}/{len(query_data)} ---")
         text_query = item['query_text']
         image_query_url = item['query_image']
-
-        filter_criteria = extract_filter_criteria(text_query)
-        print(f"提取到的过滤条件：{filter_criteria}")
+        filter_criteria = {
+            "target_name": item.get('name'),
+            "target_x": item.get('size_x'),
+            "target_y": item.get('size_y')
+        }
+        print(f"使用的过滤条件：{filter_criteria}")
         start_time = time.time()
+
+        
+        
         hits = multimodal_search(text_query, image_query_url, top_k=20, filters=filter_criteria)
         latency = time.time() - start_time
         latencies.append(latency)
@@ -64,6 +70,23 @@ def run_online():
         print(f"平均召回时延: {avg_recall_latency:.4f}s")
         
     final_assetids = vlm_select_assetids(all_results)
+    for item in final_assetids:
+        raw_assetid = item.get("assetid")
+        if raw_assetid is None:
+            item["assetid"] = ""
+            continue
+
+        assetid_text = str(raw_assetid).strip()
+        if not assetid_text or assetid_text.lower() in {"none", "null"}:
+            item["assetid"] = ""
+            continue
+
+        try:
+            # Only numeric assetid should be encrypted.
+            item["assetid"] = encrypt(int(assetid_text))
+        except (TypeError, ValueError):
+            item["assetid"] = ""
+
     print(f"\n========================================")
     print(f"VLM 最终组合搭配的 assetids: {final_assetids}")
     print(f"========================================\n")

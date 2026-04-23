@@ -1,27 +1,45 @@
 
 [
     {
-        "query_text": "新中式单人休闲沙发，胡桃木实木框架+米白布艺软包，圆柱抱枕（几何纹）+粉色靠垫，黄铜色端头点缀；尺寸约长99cm×宽94cm×高98cm。",
+        "name": "沙发",
+        "size_x": 990,
+        "size_y": 940,
+        "query_text": "新中式单人休闲沙发，胡桃木实木框架+米白布艺软包，圆柱抱枕（几何纹）+粉色靠垫，黄铜色端头点缀。",
         "query_image": "https://qhrenderpicoss.kujiale.com/r/2021/04/16/L4D1113ENDDV7YCQVQEJNFP4P3ST3WKTI8_1000x1000.jpg"
     },
     {
-        "query_text": "复古简约电视柜，深胡桃木色，实木贴皮柜体+金属小拉手，尺寸约主柜长310cm×宽46.1cm×高63.9cm（两侧边几各约长50cm×宽40cm×高55cm）。",
+        "name": "电视柜",
+        "size_x": 3100,
+        "size_y": 461,
+        "query_text": "复古简约电视柜，深胡桃木色，实木贴皮柜体+金属小拉手。",
         "query_image": "https://qhrenderpicoss.kujiale.com/r/2021/04/16/L4D1113ENDDV7YCTPYEJNFPWWA2D3WKVY8_1000x1000.jpg"
     },
     {
-        "query_text": "现代极简L型小厨房橱柜：上柜纯白平板门，下柜浅灰，白色石英石台面；黑色台下盆+黑色单柄龙头，嵌入式双灶台（右侧延伸吧台/操作台）。尺寸1700×2600mm。",
+        "name": "橱柜",
+        "size_x": 1700,
+        "size_y": 2600,
+        "query_text": "现代极简L型小厨房橱柜：上柜纯白平板门，下柜浅灰，白色石英石台面；黑色台下盆+黑色单柄龙头，嵌入式双灶台（右侧延伸吧台/操作台）。",
         "query_image": "https://qhrenderpicoss.kujiale.com/r/2019/04/17/L4D1113ENDDVBU5WK4EJLMOK7LET3WKSI8_1000x1000.jpg"
     },
     {
-        "query_text": "海尔壁挂式抽油烟机，现代极简风，银灰色，拉丝不锈钢机身+钢化玻璃触控面板，尺寸约长90cm×宽50cm×高60cm。",
+        "name": "抽油烟机",
+        "size_x": 900,
+        "size_y": 500,
+        "query_text": "海尔壁挂式抽油烟机，现代极简风，银灰色，拉丝不锈钢机身+钢化玻璃触控面板。",
         "query_image": "http://qhyxpic.oss.kujiale.com/r/2018/07/31/L4D1113ENDDVCJRJAJEJL4POMZH33WKWI8_1000x1000.jpg"
     },
     {
-        "query_text": "海尔四门对开门冰箱，现代简约风，哑光浅灰色，金属喷涂箱体+拉丝金属把手，尺寸约长90cm×宽65cm×高180cm。",
+        "name": "冰箱",
+        "size_x": 900,
+        "size_y": 650,
+        "query_text": "海尔四门对开门冰箱，现代简约风，哑光浅灰色，金属喷涂箱体+拉丝金属把手。",
         "query_image": "https://qhrenderpicoss.kujiale.com/r/2025/02/10/L3D446S265B19ENDPK3COHAUWIMDULUFX5XCUTQ8_1000x1000.jpg"
     },
     {
-        "query_text": "现代极简风台下式水槽，哑光深灰/黑色，石英复合材质水槽+不锈钢龙头，尺寸约长75cm×宽45cm×深22cm。",
+        "name": "水槽",
+        "size_x": 750,
+        "size_y": 450,
+        "query_text": "现代极简风台下式水槽，哑光深灰/黑色，石英复合材质水槽+不锈钢龙头。",
         "query_image": "https://qhrenderpicoss.kujiale.com/r/2025/01/10/L3D446S265B19ENDPKPNV2IUWIMDULUFX77PZNY8_1000x1000.jpg"
     }
 ]
