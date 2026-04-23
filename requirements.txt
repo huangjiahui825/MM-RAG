@@ -1,4 +1,10 @@
 llama-index-core
 llama-index-vector-stores-qdrant
+llama-index-llms-openai
 httpx
 Pillow
+python-dotenv
+qdrant-client
+transformers>=4.57.0
+qwen-vl-utils>=0.0.14
+torch
