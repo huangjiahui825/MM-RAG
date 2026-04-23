@@ -1,44 +1,73 @@
-from offline.build_text_index import build_text_index
-from offline.build_image_index import build_image_index
-from online.text_search import text_search
-from online.image_search import image_search
+from pathlib import Path
+import json
+from online.multimodal_search import multimodal_search
+from offline.build_multimodal_index import build_multimodal_index
+from generation import extract_filter_criteria, vlm_select_assetids
+from reranker import rerank
+import config
+from evaluation.retrieval_metrics import evaluate_retrieval
+import time
 
 
 def run_offline():
     print("=" * 50)
-    print("离线阶段：建索引")
+    print(f"离线阶段：构建多模态索引 ({config.MULTIMODAL_DIM}维)")
     print("=" * 50)
 
-    print("\n[1/2] 文本建索引...")
-    build_text_index()
-
-    print("\n[2/2] 图片建索引...")
-    build_image_index()
+    build_multimodal_index()
 
     print("\n离线阶段完成。")
 
-
 def run_online():
-    print("\n" + "=" * 50)
-    print("在线阶段：检索")
-    print("=" * 50)
+    with open(config.ONLINE_QUERY_TEXT_IMAGES_JSON, 'r', encoding='utf-8') as f:
+        query_data = json.load(f)
 
-    # 文本检索
-    text_query = "橱柜推荐"
-    print(f"\n[文本检索] query: 「{text_query}」")
-    text_results = text_search(text_query, top_k=3)
-    for i, r in enumerate(text_results):
-        print(f"  [{i+1}] score={r['score']:.4f} | {r['source']}")
-        print(f"       {r['text'][:80]}...")
+    all_results = []
+    latencies = []
 
-    # 图片检索
-    image_query = "./data/online_query_materials/images/query.jpg"
-    print(f"\n[图片检索] query: {image_query}")
-    image_results = image_search(image_query, top_k=3)
-    for i, r in enumerate(image_results):
-        print(f"  [{i+1}] score={r['score']:.4f} | {r['file_name']}")
+    for i, item in enumerate(query_data):
+        
 
+        print(f"\n--- 查询 {i+1}/{len(query_data)} ---")
+        text_query = item['query_text']
+        image_query_url = item['query_image']
+
+        filter_criteria = extract_filter_criteria(text_query)
+        print(f"提取到的过滤条件：{filter_criteria}")
+        start_time = time.time()
+        hits = multimodal_search(text_query, image_query_url, top_k=20, filters=filter_criteria)
+        latency = time.time() - start_time
+        latencies.append(latency)
+        reranked_results = rerank(text_query, image_query_url, hits, top_k=10)
+        retrieved_ids = [res['assetid'] for res in reranked_results]
+
+        reranker_scores = [res.get('reranker_score', 0.0) for res in reranked_results]
+
+        print(f"\n--- 查询 {i+1}/{len(query_data)} ---")
+        print(f"提取条件：{filter_criteria}")
+        print(f"检索结果 IDs: {retrieved_ids}")
+        print(f"精排分数: {reranker_scores}")
+        print(f"召回阶段耗时: {latency:.4f}s")
+
+        # 当前走 VLM + Prompt 路线
+        current_query_results = {
+            "query_id": i + 1,
+            "query_text": text_query,
+            "query_image": image_query_url,
+            "retrieved_images": reranked_results
+        }
+        all_results.append(current_query_results)
+
+    if latencies:
+        avg_recall_latency = sum(latencies) / len(latencies)
+        print(f"\n" + "="*30)
+        print(f"平均召回时延: {avg_recall_latency:.4f}s")
+        
+    final_assetids = vlm_select_assetids(all_results)
+    print(f"\n========================================")
+    print(f"VLM 最终组合搭配的 assetids: {final_assetids}")
+    print(f"========================================\n")
 
 if __name__ == "__main__":
-    run_offline()
+    # run_offline()
     run_online()
